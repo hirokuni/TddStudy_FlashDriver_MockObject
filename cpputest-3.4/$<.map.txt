@@ -1,0 +1,36 @@
+# Path: conftest
+# Arch: x86_64
+# Object files:
+[  0] linker synthesized
+[  1] /usr/lib/crt1.10.6.o
+[  2] /var/folders/ln/f9wb3n5n0znd87xpr7q634y00000gn/T//ccCnwLUj.o
+[  3] /usr/lib/libpthread.dylib
+# Sections:
+# Address	Size    	Segment	Section
+0x100000EF0	0x00000048	__TEXT	__text
+0x100000F38	0x00000006	__TEXT	__stubs
+0x100000F40	0x0000001A	__TEXT	__stub_helper
+0x100000F5A	0x00000050	__TEXT	__unwind_info
+0x100000FB0	0x00000048	__TEXT	__eh_frame
+0x100001000	0x00000028	__DATA	__program_vars
+0x100001028	0x00000010	__DATA	__nl_symbol_ptr
+0x100001038	0x00000008	__DATA	__la_symbol_ptr
+0x100001040	0x00000020	__DATA	__common
+# Symbols:
+# Address	Size    	File  Name
+0x100000EF0	0x0000003C	[  1] start
+0x100000F30	0x00000008	[  2] _main
+0x100000F38	0x00000006	[  3] _exit
+0x100000F40	0x00000010	[  0] helper helper
+0x100000F50	0x0000000A	[  3] _exit
+0x100000F5A	0x00000050	[  0] compact unwind info
+0x100000FB0	0x00000018	[  2] CIE
+0x100000FC8	0x00000030	[  2] FDE for: _main
+0x100001000	0x00000028	[  1] _pvars
+0x100001028	0x00000008	[  0] non-lazy-pointer-to-local: dyld_stub_binder
+0x100001030	0x00000008	[  0] non-lazy-pointer
+0x100001038	0x00000008	[  3] _exit
+0x100001040	0x00000008	[  1] _NXArgc
+0x100001048	0x00000008	[  1] _NXArgv
+0x100001050	0x00000008	[  1] _environ
+0x100001058	0x00000008	[  1] ___progname

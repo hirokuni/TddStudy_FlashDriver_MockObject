@@ -1,0 +1,49 @@
+# this is set up to by default to make the top level and test with CppUTest
+#all: codeUnity
+
+OBJS = Hello.o
+OUTDIR=bin
+CC = gcc
+TARGET = TddTest
+
+all: $(TARGET)
+
+$(TARGET): Hello.o
+#1 tab should be inserted before $(CC)
+	$(CC) -o $@ $(OBJS)
+
+%.o: %.c
+	$(CC) -c $<
+
+clean:
+	#@echo "test"
+	$(RM) $(TARGET) $(OBJS)
+#all: TddTest
+#TddTest: @echo "test"
+
+
+#TddTest: @echo "test"
+#get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
+
+
+#CC = gcc
+#CFLAGS = -O4 -Wall -I/usr/local/include
+#LDFLAGS = -L/Users/hirokuni/work/cpputest-3.4
+#LIBS := -lCppUTest -lCppUTestExt
+#PRODUCT_OBJS = IO.c
+#TEST_OBJS = 
+
+#TEST_SRC_DIRS = \
+#	.\
+#	mocks\
+#	mocks\
+#	tests/LedDriver\
+#	tests/stdio\
+#	tests/util\
+#	tests/IO\
+#	tests/zune\
+#	tests/HomeAutomation\
+#	tests/dvr\
+#	tests\
+#	tests/MyOS\
+
