@@ -46,7 +46,18 @@ TEST_GROUP(Flash) {
 						.andReturnValue((int)data);
 	}
 };
+TEST(Flash, SucceedsNotImmediatelyReady) {
+	MockIO_Expect_Write(CommandRegister,ProgramCommand);
+	MockIO_Expect_Write(address,data);
+	MockIO_Expect_Read(StatusRegister,0);
+	MockIO_Expect_Read(StatusRegister,0);
+	MockIO_Expect_Read(StatusRegister,0);
+	MockIO_Expect_Read(StatusRegister,ReadyBit);
+	MockIO_Expect_Read(address,data);
 
+	result = Flash_Write(address, data);
+	LONGS_EQUAL(FLASH_SUCCESS,result);
+}
 TEST(Flash, WriteSucceeds_ReadyImmediately) {
 	/*
 	 * Setup : Å‰‚ÉŠú‘Ò‚ğ’è‹`‚·‚éB

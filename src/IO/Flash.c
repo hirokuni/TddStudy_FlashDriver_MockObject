@@ -11,9 +11,11 @@
 
 
 int Flash_Write(ioAddress addr, ioData data){
+	ioData status = 0;
     IO_Write(CommandRegister,ProgramCommand);
     IO_Write(addr,data);
-    IO_Read(StatusRegister);
+    while((status & ReadyBit) == 0)
+    	status = IO_Read(StatusRegister);
     IO_Read(addr);
 	return (int)FLASH_SUCCESS;
 }
