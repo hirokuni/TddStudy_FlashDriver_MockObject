@@ -15,7 +15,7 @@ int Flash_Write(ioAddress addr, ioData data){
     IO_Write((ioAddress)4096,(ioData)48879);
 
     IO_Read((ioAddress)0);
-    IO_Read((ioAddress)48879);
+    IO_Read((ioAddress)0x1000);
 	return (int)FLASH_SUCCESS;
 }
 
