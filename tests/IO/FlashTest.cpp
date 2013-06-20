@@ -46,6 +46,17 @@ TEST_GROUP(Flash) {
 						.andReturnValue((int)data);
 	}
 };
+
+TEST(Flash, WriteFails_VppError) {
+	MockIO_Expect_Write(CommandRegister,ProgramCommand);
+	MockIO_Expect_Write(address,data);
+	MockIO_Expect_Read(StatusRegister, ReadyBit|VpErrorBit);
+	MockIO_Expect_Write(CommandRegister,Reset);
+
+	result = Flash_Write(address,data);
+
+	LONGS_EQUAL(FLASH_VPP_ERROR,result);
+}
 TEST(Flash, SucceedsNotImmediatelyReady) {
 	MockIO_Expect_Write(CommandRegister,ProgramCommand);
 	MockIO_Expect_Write(address,data);

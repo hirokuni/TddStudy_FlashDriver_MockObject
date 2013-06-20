@@ -29,6 +29,7 @@ enum
 enum
 {
 	ReadyBit = 1<<7,
+	VpErrorBit = 1<<3
 };
 
 #endif /* M28W160ECT_H_ */

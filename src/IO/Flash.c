@@ -16,6 +16,10 @@ int Flash_Write(ioAddress addr, ioData data){
     IO_Write(addr,data);
     while((status & ReadyBit) == 0)
     	status = IO_Read(StatusRegister);
+    if(status & VpErrorBit){
+    	IO_Write(CommandRegister,Reset);
+    	return (int)FLASH_VPP_ERROR;
+    }
     IO_Read(addr);
 	return (int)FLASH_SUCCESS;
 }

@@ -11,6 +11,7 @@
 
 enum {
 	FLASH_SUCCESS,
+	FLASH_VPP_ERROR
 };
 
 
