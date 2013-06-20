@@ -11,11 +11,10 @@
 
 
 int Flash_Write(ioAddress addr, ioData data){
-    IO_Write((ioAddress)0,(ioData)0x40);
-    IO_Write((ioAddress)4096,(ioData)48879);
-
-    IO_Read((ioAddress)0);
-    IO_Read((ioAddress)0x1000);
+    IO_Write(CommandRegister,ProgramCommand);
+    IO_Write(addr,data);
+    IO_Read(StatusRegister);
+    IO_Read(addr);
 	return (int)FLASH_SUCCESS;
 }
 
