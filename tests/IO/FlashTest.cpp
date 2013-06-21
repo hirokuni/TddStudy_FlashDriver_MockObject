@@ -47,6 +47,28 @@ TEST_GROUP(Flash) {
 	}
 };
 
+TEST(Flash, WriteFails_BlockError) {
+	MockIO_Expect_Write(CommandRegister,ProgramCommand);
+	MockIO_Expect_Write(address,data);
+	MockIO_Expect_Read(StatusRegister, ReadyBit|BlockErrorBit);
+	MockIO_Expect_Write(CommandRegister,Reset);
+
+	result = Flash_Write(address,data);
+
+	LONGS_EQUAL(BLOCK_ERROR,result);
+}
+
+TEST(Flash, WriteFails_ProgramError) {
+	MockIO_Expect_Write(CommandRegister,ProgramCommand);
+	MockIO_Expect_Write(address,data);
+	MockIO_Expect_Read(StatusRegister, ReadyBit|ProgramErrorBit);
+	MockIO_Expect_Write(CommandRegister,Reset);
+
+	result = Flash_Write(address,data);
+
+	LONGS_EQUAL(PROGRAM_ERROR,result);
+}
+
 TEST(Flash, WriteFails_VppError) {
 	MockIO_Expect_Write(CommandRegister,ProgramCommand);
 	MockIO_Expect_Write(address,data);
