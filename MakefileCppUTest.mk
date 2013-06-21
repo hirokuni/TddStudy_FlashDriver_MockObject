@@ -44,6 +44,7 @@ SRC_FILES =\
 
 TEST_SRC_FILES = \
 	mocks/IO/MockIO.cpp\
+	mocks/FakeMicroTime.c\
 	tests/IO/FlashTest.cpp\
 	tests/AllTests.cpp\
 	
