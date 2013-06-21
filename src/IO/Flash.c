@@ -9,15 +9,8 @@
 #include "m28w160ect.h"
 #include "Flash.h"
 
-int Flash_Write(ioAddress addr, ioData data) {
-	ioData status = 0;
-	IO_Write(CommandRegister, ProgramCommand);
-	IO_Write(addr, data);
-	while ((status & ReadyBit) == 0)
-		status = IO_Read(StatusRegister);
-
-	if (status != ReadyBit) {
-		IO_Write(CommandRegister, Reset);
+static int writeError(int status){
+	IO_Write(CommandRegister, Reset);
 		if (status & VpErrorBit)
 			return (int) FLASH_VPP_ERROR;
 		else if (status & ProgramErrorBit)
@@ -26,7 +19,18 @@ int Flash_Write(ioAddress addr, ioData data) {
 			return (int) BLOCK_ERROR;
 		else
 			return (int)UNKNOWN_ERROR;
-	}
+}
+
+int Flash_Write(ioAddress addr, ioData data) {
+	ioData status = 0;
+	IO_Write(CommandRegister, ProgramCommand);
+	IO_Write(addr, data);
+	while ((status & ReadyBit) == 0)
+		status = IO_Read(StatusRegister);
+
+	if (status != ReadyBit)
+		return writeError(status);
+
 	IO_Read(addr);
 	return (int) FLASH_SUCCESS;
 }

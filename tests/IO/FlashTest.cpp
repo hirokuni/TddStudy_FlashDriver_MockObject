@@ -40,17 +40,29 @@ TEST_GROUP(Flash) {
 					.withParameter("value",(int)data);//0x40
 	}
 
-	void MockIO_Expect_Read(ioAddress addr, ioData data){
+	void MockIO_Expect_ReadThenReturn(ioAddress addr, ioData data){
 		mock("IO").expectOneCall("IO_Read")
 						.withParameter("addr",(int)addr)
 						.andReturnValue((int)data);
 	}
 };
 
+TEST(Flash, WriteFails_Ignore_Other_Bits_Until_Ready) {
+	MockIO_Expect_Write(CommandRegister,ProgramCommand);
+	MockIO_Expect_Write(address,data);
+	MockIO_Expect_ReadThenReturn(StatusRegister, ~ReadyBit);
+	MockIO_Expect_ReadThenReturn(StatusRegister, ReadyBit);
+	MockIO_Expect_ReadThenReturn(address,data);
+
+	result = Flash_Write(address,data);
+
+	LONGS_EQUAL(FLASH_SUCCESS,result);
+}
+
 TEST(Flash, WriteFails_BlockError) {
 	MockIO_Expect_Write(CommandRegister,ProgramCommand);
 	MockIO_Expect_Write(address,data);
-	MockIO_Expect_Read(StatusRegister, ReadyBit|BlockErrorBit);
+	MockIO_Expect_ReadThenReturn(StatusRegister, ReadyBit|BlockErrorBit);
 	MockIO_Expect_Write(CommandRegister,Reset);
 
 	result = Flash_Write(address,data);
@@ -61,7 +73,7 @@ TEST(Flash, WriteFails_BlockError) {
 TEST(Flash, WriteFails_ProgramError) {
 	MockIO_Expect_Write(CommandRegister,ProgramCommand);
 	MockIO_Expect_Write(address,data);
-	MockIO_Expect_Read(StatusRegister, ReadyBit|ProgramErrorBit);
+	MockIO_Expect_ReadThenReturn(StatusRegister, ReadyBit|ProgramErrorBit);
 	MockIO_Expect_Write(CommandRegister,Reset);
 
 	result = Flash_Write(address,data);
@@ -72,7 +84,7 @@ TEST(Flash, WriteFails_ProgramError) {
 TEST(Flash, WriteFails_VppError) {
 	MockIO_Expect_Write(CommandRegister,ProgramCommand);
 	MockIO_Expect_Write(address,data);
-	MockIO_Expect_Read(StatusRegister, ReadyBit|VpErrorBit);
+	MockIO_Expect_ReadThenReturn(StatusRegister, ReadyBit|VpErrorBit);
 	MockIO_Expect_Write(CommandRegister,Reset);
 
 	result = Flash_Write(address,data);
@@ -82,11 +94,11 @@ TEST(Flash, WriteFails_VppError) {
 TEST(Flash, SucceedsNotImmediatelyReady) {
 	MockIO_Expect_Write(CommandRegister,ProgramCommand);
 	MockIO_Expect_Write(address,data);
-	MockIO_Expect_Read(StatusRegister,0);
-	MockIO_Expect_Read(StatusRegister,0);
-	MockIO_Expect_Read(StatusRegister,0);
-	MockIO_Expect_Read(StatusRegister,ReadyBit);
-	MockIO_Expect_Read(address,data);
+	MockIO_Expect_ReadThenReturn(StatusRegister,0);
+	MockIO_Expect_ReadThenReturn(StatusRegister,0);
+	MockIO_Expect_ReadThenReturn(StatusRegister,0);
+	MockIO_Expect_ReadThenReturn(StatusRegister,ReadyBit);
+	MockIO_Expect_ReadThenReturn(address,data);
 
 	result = Flash_Write(address, data);
 	LONGS_EQUAL(FLASH_SUCCESS,result);
@@ -105,10 +117,10 @@ TEST(Flash, WriteSucceeds_ReadyImmediately) {
 	MockIO_Expect_Write(address,data);
 
 	//期待３：ステータスレジスタを読み、ReadyBit(1<<7)の値が読めるはず
-	MockIO_Expect_Read(StatusRegister,ReadyBit);
+	MockIO_Expect_ReadThenReturn(StatusRegister,ReadyBit);
 
 	//期待４：期待２で書いたアドレスのデータを読んだら0x1000が返却されるはず
-	MockIO_Expect_Read(address,data);
+	MockIO_Expect_ReadThenReturn(address,data);
 
 	/*
 	 * Execute : Flashへの書き込みを行う。
