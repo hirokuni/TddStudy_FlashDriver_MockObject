@@ -6,7 +6,7 @@
  */
 
 #include "FakeMicroTime.h"
-
+#include "stdio.h"
 uint32_t time;
 uint32_t increment;
 uint32_t totalDelay;
