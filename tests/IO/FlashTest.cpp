@@ -21,7 +21,6 @@ TEST_GROUP(Flash) {
 	int result;
 
 	void setup() {
-		FakeMicroTime_Init(0,500);
 		address = 0x1000;
 		data = 0xBEEF;
 		result = -1;
